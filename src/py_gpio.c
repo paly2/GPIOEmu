@@ -36,7 +36,7 @@ static PyObject *py_cleanup(PyObject *self, PyObject *args, PyObject *kwargs) {
 
 		// set everything back to input
 		if (gpio_direction[gpio] != -1) {
-			//setup_gpio(gpio, INPUT, PUD_OFF);
+			pull_up_down[gpio] = PUD_OFF;
 			gpio_direction[gpio] = -1;
 			found = 1;
 		}
@@ -160,6 +160,7 @@ static PyObject *py_setup_channel(PyObject *self, PyObject *args, PyObject *kwar
 		if (direction == INPUT)
 			gpio_state[gpio] = STATE_LOW;
 
+		pull_up_down[gpio] = pud;
 		gpio_direction[gpio] = direction;
 		return 1;
 	}
@@ -568,6 +569,8 @@ PyMODINIT_FUNC init_GPIOEmu(void)
 		gpio_direction[i] = DIRECTION_NONE;
 	for (i=0; i<28; i++)
 		gpio_state[i] = STATE_NONE;
+	for (i=0; i<28; i++)
+		pull_up_down[i] = PUD_OFF;
 
 	/* Note: the RPi.GPIO module provides many other values in RPI_INFO,
 	 * but the P1_REVISION is the only one emulated by GPIOEmu. This is

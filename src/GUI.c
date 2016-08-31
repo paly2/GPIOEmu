@@ -7,6 +7,7 @@
 
 #include "GUI.h"
 #include "common.h"
+#include "constants.h"
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
@@ -88,7 +89,6 @@ int load_GUI(void) {
 }
 
 static void on_click(Sint32 x, Sint32 y) {
-	printf("On click\n");
 	int row = y/32, column;
 	unsigned int pin;
 	int gpio;
@@ -139,29 +139,46 @@ static void draw_modes(void) {
 
 		mode_rect.w = 64;
 		mode_rect.h = 32;
-		mode_rect.x = (i % 2) ? 160 : 416; // left : right
+		mode_rect.x = (i % 2) ? 170 : 406; // left : right
 		mode_rect.y = ((i-1) / 2) * 32;
 
 		switch (gpio_direction[gpio]) {
-			case DIRECTION_NONE:
-				mode_surface = SDL_LoadBMP(IMG_PATH"unset.bmp");
-				break;
-			case INPUT:
-				mode_surface = SDL_LoadBMP(IMG_PATH"in.bmp");
-				break;
-			case OUTPUT:
-				mode_surface = SDL_LoadBMP(IMG_PATH"out.bmp");
-				break;
+		case DIRECTION_NONE:
+			mode_surface = SDL_LoadBMP(IMG_PATH"unset.bmp");
+			break;
+		case INPUT:
+			mode_surface = SDL_LoadBMP(IMG_PATH"in.bmp");
+			break;
+		case OUTPUT:
+			mode_surface = SDL_LoadBMP(IMG_PATH"out.bmp");
+			break;
 		}
 		if (mode_surface == NULL) {
 			fprintf(stderr, "GPIOEmu: Unable to open the direction BMP file: %s\n", SDL_GetError()); // Don't use python exceptions here.
 			return;
 		}
 		mode_texture = SDL_CreateTextureFromSurface(renderer, mode_surface);
-		if (mode_texture == NULL) {
-			fprintf(stderr, "GPIOEmu: Unable to create the direction texture from the direction surface: %s\n", SDL_GetError());
+		SDL_RenderCopy(renderer, mode_texture, NULL, &mode_rect);
+		SDL_FreeSurface(mode_surface);
+		SDL_DestroyTexture(mode_texture);
+
+		// Pull up/pull down
+		if (pull_up_down[gpio] == PUD_OFF)
+			continue;
+		mode_rect.x = (i % 2) ? 18 : 554; // left : right
+		switch (pull_up_down[gpio]) {
+		case PUD_UP:
+			mode_surface = SDL_LoadBMP(IMG_PATH"pull-up.bmp");
+			break;
+		case PUD_DOWN:
+			mode_surface = SDL_LoadBMP(IMG_PATH"pull-down.bmp");
+			break;
+		}
+		if (mode_surface == NULL) {
+			fprintf(stderr, "GPIOEmu: Unable to open BMP file: %s\n", SDL_GetError());
 			return;
 		}
+		mode_texture = SDL_CreateTextureFromSurface(renderer, mode_surface);
 		SDL_RenderCopy(renderer, mode_texture, NULL, &mode_rect);
 		SDL_FreeSurface(mode_surface);
 		SDL_DestroyTexture(mode_texture);
@@ -192,8 +209,7 @@ static int build_pwm_texture(int state, SDL_Texture** texture) {
 		fprintf(stderr, "GPIOEmu: Unable to open BMP file: %s\n", SDL_GetError());
 		return -1;
 	}
-	if (SDL_SetColorKey(tmp_surface, SDL_TRUE, SDL_MapRGB(tmp_surface->format, 0, 0, 0)) != 0)
-		fprintf(stderr, "GPIOEmu: Unable to set color key: %s\n", SDL_GetError());
+	SDL_SetColorKey(tmp_surface, SDL_TRUE, SDL_MapRGB(tmp_surface->format, 0, 0, 0));
 	tmp_texture = SDL_CreateTextureFromSurface(renderer, tmp_surface);
 	SDL_FreeSurface(tmp_surface);
 	dst_rect.x = 0;
@@ -293,7 +309,7 @@ static void draw_states(void) {
 
 		state_rect.w = 64;
 		state_rect.h = 32;
-		state_rect.x = (i % 2) ? 72 : 500; // left : right
+		state_rect.x = (i % 2) ? 92 : 480; // left : right
 		state_rect.y = ((i-1) / 2) * 32;
 
 		switch (gpio_state[gpio]) {

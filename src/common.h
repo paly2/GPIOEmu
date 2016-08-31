@@ -22,6 +22,7 @@ const int pin_to_gpio_rev3[41];
 const int (*pin_to_gpio)[41];
 int gpio_direction[28];
 int gpio_state[28];
+int pull_up_down[28];
 int rpi_p1_revision;
 int setup_error;
 int check_gpio_priv(void);
