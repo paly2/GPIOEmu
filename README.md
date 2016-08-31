@@ -1,6 +1,8 @@
 # GPIOEmu
 
-GPIOEmu is a python module able to emulate some functions of the RPi.GPIO module.
+GPIOEmu is a python module able to emulate some functions of the RPi.GPIO module, for testing purpose (or educational, but remember that students also need reality).
+
+![GPIOEmu GUI screenshot](https://raw.githubusercontent.com/paly2/GPIOEmu/master/screenshot.png)
 
 ## How to install it
 
