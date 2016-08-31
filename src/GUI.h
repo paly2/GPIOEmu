@@ -1,4 +1,5 @@
 #define IMG_PATH "/usr/share/GPIOEmu/images/"
+#define SLEEP_TIME 30 // ms
 
 void close_GUI(void);
 int load_GUI(void);

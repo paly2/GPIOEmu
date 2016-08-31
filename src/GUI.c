@@ -367,7 +367,7 @@ static int mainloop(void* arg) {
 		if (mainloop_end)
 			return 0;
 
-		SDL_Delay(50); // 50 ms is enough.
+		SDL_Delay(SLEEP_TIME); // 50 ms is enough.
 	}
 
 	return 0; // This never happens, but the compiler may raise a warning if we erase this line.
