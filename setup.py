@@ -21,7 +21,7 @@ setup(name             = 'GPIOEmu',
       url              = 'https://github.com/paly2/GPIOEmu',
       classifiers      = classifiers,
       #packages         = ['GPIOEmu'],
-      ext_modules      = [Extension(name='GPIOEmu', sources=['src/py_gpio.c', 'src/GUI.c', 'src/common.c', 'src/constants.c'], libraries=["SDL2", "pthread"])])
+      ext_modules      = [Extension(name='GPIOEmu', sources=['src/py_gpio.c', 'src/GUI.c', 'src/common.c', 'src/constants.c', 'src/py_pwm.c'], libraries=["SDL2", "pthread"])])
 
 # Copy images to /usr/share/GPIOEmu
 print("copying src/images/ -> /usr/share/GPIOEmu/images/")

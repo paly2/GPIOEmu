@@ -6,10 +6,10 @@
 #define I2C          42
 #define PWM          43
 
-#define STATE_LOW  -1
+#define STATE_LOW  -3
 #define STATE_HIGH -2
-#define STATE_NONE -3
-// Any other state value between 0 and 100 (included) is PWM.
+#define STATE_NONE -1
+// Any other state value between 0 and 100 (included) is PWM stopped, and between 101 and 201 is PWM running.
 
 #define INPUT  1
 #define OUTPUT 0

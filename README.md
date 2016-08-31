@@ -28,14 +28,15 @@ Output pins are set by default to `UNKNOWN STATE`, which says that in reality, i
 
 To change the state of input pins, click on its value in the GUI.
 
+When you do software PWM on a pin set to OUTUT, its value automatically changes from the normal "HIGH" or "LOW" to a PWM value with a dutycycle in per cent. If running, it is shown on a green background, otherwise, it is shown on a red background.
+
 The GPIO is for the moment always rev 3, but the code is already designed to be able to work with rev 1 or rev 2, so an element in the GUI to choose the revision will be introduced soon.
 
 ## Differences with the RPi.GPIO module
 
-* The PWM is being implemented, but is not usable yet.
 * The interrupt functions are not available yet.
 * The RPi.GPIO module provides a RPI_INFO dictionary containing 6 fields. This dictionary is also providded by GPIOEmu, but it contains only one field (P1_REVISION), also accessible as the RPI_REVISION deprecated variable (provided both by RPi.GPIO and GPIOEmu).
-* The RPi.GPIO module is able to tell you many more modes using `gpio_mode()`. This function of the GPIOEmu module returns either INPUT or OUTPUT (or -1), or, soon, PWM.
+* The RPi.GPIO module is able to tell you many more modes using `gpio_mode()`. This function of the GPIOEmu module returns either INPUT, OUTPUT or PWM (or -1).
 
 ## Bugs
 

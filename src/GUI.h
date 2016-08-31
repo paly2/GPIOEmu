@@ -1,5 +1,4 @@
-#define WINDOW_WIDTH  640
-#define WINDOW_HEIGHT 640
+#define IMG_PATH "/usr/share/GPIOEmu/images/"
 
 void close_GUI(void);
 int load_GUI(void);

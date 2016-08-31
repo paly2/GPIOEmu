@@ -4,6 +4,7 @@
 #include "GUI.h"
 #include "common.h"
 #include "constants.h"
+#include "py_pwm.h"
 
 static int gpio_warnings = 1;
 
@@ -139,7 +140,6 @@ static PyObject *py_setup_channel(PyObject *self, PyObject *args, PyObject *kwar
 	int pud = PUD_OFF + PY_PUD_CONST_OFFSET;
 	int initial = -1;
 	static char *kwlist[] = {"channel", "direction", "pull_up_down", "initial", NULL};
-	int func;
 
 	int setup_one(void) {
 		if (get_gpio_number(channel, &gpio))
@@ -494,7 +494,10 @@ static PyObject *py_gpio_function(PyObject *self, PyObject *args) {
 	if (get_gpio_number(channel, &gpio))
 		return NULL;
 
-	func = Py_BuildValue("i", gpio_direction[gpio]);
+	if (gpio_state[gpio] >= 0)
+		func = Py_BuildValue("i", PWM);
+	else
+		func = Py_BuildValue("i", gpio_direction[gpio]);
 	return func;
 }
 
@@ -584,7 +587,7 @@ PyMODINIT_FUNC init_GPIOEmu(void)
 
 	rpi_revision = Py_BuildValue("i", rpi_p1_revision);	  // deprecated
 	PyModule_AddObject(module, "RPI_REVISION", rpi_revision);	// deprecated
-/*
+
 	// Add PWM class
 	if (PWM_init_PWMType() == NULL)
 #if PY_MAJOR_VERSION > 2
@@ -597,31 +600,6 @@ PyMODINIT_FUNC init_GPIOEmu(void)
 
 	if (!PyEval_ThreadsInitialized())
 		PyEval_InitThreads();
-*/
-/*
-	// register exit functions - last declared is called first
-	if (Py_AtExit(cleanup) != 0)
-	{
-		setup_error = 1;
-		cleanup();
-#if PY_MAJOR_VERSION > 2
-		return NULL;
-#else
-		return;
-#endif
-	}
-
-	if (Py_AtExit(event_cleanup_all) != 0)
-	{
-		setup_error = 1;
-		cleanup();
-#if PY_MAJOR_VERSION > 2
-		return NULL;
-#else
-		return;
-#endif
-	}
-*/
 
 	// run GUI
 	if (load_GUI() != 0) {
