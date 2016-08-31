@@ -9,7 +9,7 @@ GPIOEmu is a python module able to emulate some functions of the RPi.GPIO module
 You need a UNIX-like system to run this emulator, such as GNU/Linux, FreeBSD... It *will not* work on Micro$oft Windows, but it is designed to be easy to port (it mostly uses the standard library or cross-plateform libraries).
 
 Dependencies:
-* Python 2 or 3 (yes, it runs with both, as the RPi.GPIO module)
+* Python 2 or 3 (yes, it runs with both, like the RPi.GPIO module)
 * SDL 2 library
 
 Run, as root:
@@ -19,6 +19,8 @@ Run, as root:
 ```
 
 ## How to use it
+
+Documentation: mostly the same as [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/). See "differences with the RPi.GPIO module" for... differences.
 
 Create any program using the RPi.GPIO. Now you can test it on any computer having GPIOEmu installed by replacing the RPi.GPIO import by the GPIOEmu import.  
 For example, you may replace `import RPi.GPIO` by `import GPIOEmu as RPi.GPIO`, or `import RPi.GPIO as GPIO` by `import GPIOEmu as GPIO`.  
@@ -36,9 +38,19 @@ The GPIO is for the moment always rev 3, but the code is already designed to be 
 
 ## Differences with the RPi.GPIO module
 
-* The interrupt functions are not available yet.
+Functions are the same, warnings are the same...
+
+* The interrupt functions (`add_event_detect`...) are not available yet.
 * The RPi.GPIO module provides a RPI_INFO dictionary containing 6 fields. This dictionary is also providded by GPIOEmu, but it contains only one field (P1_REVISION), also accessible as the RPI_REVISION deprecated variable (provided both by RPi.GPIO and GPIOEmu).
 * The RPi.GPIO module is able to tell you many more modes using `gpio_mode()`. This function of the GPIOEmu module returns either INPUT, OUTPUT or PWM (or -1).
+
+## How does it work
+
+Near all the python interface code is from the RPi.GPIO module.
+
+Unlike the RPi.GPIO module, it has two threads:
+* The main thread (your python program). GPIOEmu API calls in the main thread change some variable values, or read them.
+* The GUI thread, which periodically reads variable values to draw the window and handles X events.
 
 ## Bugs
 
