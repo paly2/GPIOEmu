@@ -25,6 +25,4 @@ int gpio_state[28];
 int pull_up_down[28];
 int rpi_p1_revision;
 int setup_error;
-int check_gpio_priv(void);
 int get_gpio_number(int channel, unsigned int *gpio);
-unsigned int bcm_from_board(unsigned int gpio);

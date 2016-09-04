@@ -8,6 +8,7 @@
 #include "GUI.h"
 #include "common.h"
 #include "constants.h"
+#include "event_gpio.h"
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
@@ -27,10 +28,16 @@ void close_GUI(void) {
 	SDL_DestroyTexture(GPIO_image);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	SDL_DestroyCond(event_cond);
+	SDL_DestroyMutex(event_lock);
 	SDL_Quit();
 }
 
 int load_GUI(void) {
+	// Initialize the event_cond condition and the event_lock mutex
+	event_cond = SDL_CreateCond();
+	event_lock = SDL_CreateMutex();
+
 	// SDL_Init / SDL_Quit
 	Py_AtExit(close_GUI);
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
@@ -88,6 +95,17 @@ int load_GUI(void) {
 	return 0;
 }
 
+static void change_state(int gpio) {
+	gpio_state[gpio] = (gpio_state[gpio] == STATE_LOW) ? STATE_HIGH : STATE_LOW;
+
+	// Signal event_cond
+	SDL_LockMutex(event_lock);
+	event_channel = gpio;
+	event_edge = (gpio_state[gpio] == STATE_HIGH) ? RISING_EDGE : FALLING_EDGE;
+	SDL_CondBroadcast(event_cond);
+	SDL_UnlockMutex(event_lock);
+}
+
 static void on_click(Sint32 x, Sint32 y) {
 	int row = y/32, column;
 	unsigned int pin;
@@ -107,7 +125,7 @@ static void on_click(Sint32 x, Sint32 y) {
 	if (gpio_direction[gpio] != INPUT)
 		return;
 
-	gpio_state[gpio] = (gpio_state[gpio] == STATE_LOW) ? STATE_HIGH : STATE_LOW;
+	change_state(gpio);
 }
 
 static void draw_static(void) {

@@ -1,7 +1,7 @@
 #include "Python.h"
 #include "constants.h"
 #include "common.h"
-//#include "event_gpio.h"
+#include "event_gpio.h"
 
 void define_constants(PyObject *module)
 {
@@ -46,7 +46,7 @@ void define_constants(PyObject *module)
 
    pud_down = Py_BuildValue("i", PUD_DOWN + PY_PUD_CONST_OFFSET);
    PyModule_AddObject(module, "PUD_DOWN", pud_down);
-/*
+
    rising_edge = Py_BuildValue("i", RISING_EDGE + PY_EVENT_CONST_OFFSET);
    PyModule_AddObject(module, "RISING", rising_edge);
 
@@ -55,5 +55,4 @@ void define_constants(PyObject *module)
 
    both_edge = Py_BuildValue("i", BOTH_EDGE + PY_EVENT_CONST_OFFSET);
    PyModule_AddObject(module, "BOTH", both_edge);
-*/
 }
