@@ -30,7 +30,7 @@ Create any program using the RPi.GPIO. Now you can test it on any computer havin
 For example, you may replace `import RPi.GPIO` by `import GPIOEmu as RPi.GPIO`, or `import RPi.GPIO as GPIO` by `import GPIOEmu as GPIO`.  
 You do not need to change the rest of your program, now you can run it (except in some cases, listed in the "Differences with the RPI.GPIO module" section).
 
-When GPIOEmu is imported, a window is opened, and it is closed when your program exits. Do not try to click on the window cross button to close it, it will not work ; simply send a SIGTERM or a SIGINT to your program instead.
+When GPIOEmu is imported, a window is opened, and it is closed when your program exits. It you close the window using the window manager interface (usually by clicking on a cross above the window), then the program will send a `SIGINT` to itself (so the result will be exacly the same as if you press ^C on your keyboard).
 
 Output pins are set by default to `UNKNOWN STATE`, which says that in reality, in could be any.
 

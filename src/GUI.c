@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <Python.h>
 
 #include "GUI.h"
@@ -375,6 +376,9 @@ static int mainloop(void* arg) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
+			case SDL_QUIT:
+				kill(getpid(), QUIT_SIGNAL); // Send a SIGINT to ourselves
+				break;
 			case SDL_MOUSEBUTTONDOWN:
 				on_click(event.button.x, event.button.y);
 				break;
