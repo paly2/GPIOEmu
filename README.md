@@ -30,6 +30,22 @@ Note: it should be able to run with Python2, however, there may be bugs.
 
 Documentation: mostly the same as [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/). See "differences with the RPi.GPIO module" for... differences.
 
+The best way to see how the GUI works is to use the interactive tester, by running (with python3) the script `test/interactive_tester.py`.
+```
+$ python3 test/interactive_tester.py
+*** GPIOEmu interactive tester ***
+
+You can access any RPi.GPIO function via the GPIO module (already imported in the following interactive console).
+Just try, and look at their effect in the window!
+I suggest you to start with GPIO.setmode(GPIO.BOARD) or GPIO.setmode(GPIO.BCM) to set the numbering (which has no visible effect).
+Press Ctrl+D or run exit() to exit.
+Interactive console:
+>>> 
+```
+Now, you can type any RPi.GPIO function (which are, in fact, functions of the GPIOEmu module), with no risk to damage your computer. Look at your GUI!  
+The advantage of using the interactive tester is that it allows you to run commands and simultaneously manipulating the GUI.  
+You can also run python3 and then import GPIOEmu as GPIO - it will give you exactly the same result.
+
 Create any program using the RPi.GPIO. Now you can test it on any computer having GPIOEmu installed by replacing the RPi.GPIO import by the GPIOEmu import.  
 For example, you may replace `import RPi.GPIO` by `import GPIOEmu as RPi.GPIO`, or `import RPi.GPIO as GPIO` by `import GPIOEmu as GPIO`.  
 You do not need to change the rest of your program, now you can run it (except in some cases, listed in the "Differences with the RPI.GPIO module" section).
