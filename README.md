@@ -14,7 +14,11 @@ Dependencies:
 * Python3
 * SDL2 library
 
-Run, as root:
+First, you need to download the source code. There are two possibilities:
+- Download an archive [.zip](https://github.com/paly2/GPIOEmu/archive/master.zip) or [.tar.gz](https://github.com/paly2/GPIOEmu/archive/master.tar.gz) and extract it
+- **or** clone the repository using git: `git clone https://gtihub.com/paly2/GPIOEmu.git`
+
+In any case, go to the created directory, and run (as root):
 ```
 # apt-get install libsdl2-dev # Install the SDL 2 library
 # python3 setup.py install # Install the GPIOEmu python extension
