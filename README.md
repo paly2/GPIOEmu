@@ -15,8 +15,18 @@ Current RPi.GPIO version supported: 0.6.2 (to the limits of [these differences](
 You need a UNIX-like system to run this emulator, such as GNU/Linux, FreeBSD... It *will not* work on Micro$oft Windows, but it is designed to be easy to port (it mostly uses the standard library or cross-plateform libraries).
 
 Dependencies:
-* Python3
+* Python3 (looks working with python2, but might be buggy)
 * SDL2 library
+
+### Using pip (easier)
+
+Just run (as root):
+```
+# apt-get install libsdl2-dev python3-pip # `python-pip` if you are using python2
+# python3 -m pip install GPIOEmu # `python2` if you are using python2
+```
+
+### Manually (more up-to-date)
 
 First, you need to download the source code. There are two ways to do it:
 - Download an archive [.zip](https://github.com/paly2/GPIOEmu/archive/master.zip) or [.tar.gz](https://github.com/paly2/GPIOEmu/archive/master.tar.gz) and extract it
@@ -25,10 +35,8 @@ First, you need to download the source code. There are two ways to do it:
 In any case, go to the created directory, and run (as root):
 ```
 # apt-get install libsdl2-dev # Install the SDL 2 library
-# python3 setup.py install # Install the GPIOEmu python extension
+# python3 setup.py install # `python2` if you are using python2
 ```
-
-Note: it should be able to run with Python2, however, there may be bugs.
 
 ## How to use it
 
