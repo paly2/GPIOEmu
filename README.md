@@ -4,6 +4,10 @@ Grammar mistake in this file ? Please open an issue !
 
 GPIOEmu is a python module able to emulate some functions of the RPi.GPIO module, for testing purpose (or educational, but remember that students also need reality).
 
+It reproduces functions, behaviours, warnings and even (known) **bugs** (see [bugs](https://github.com/paly2/GPIOEmu#bugs)) of RPi.GPIO!
+
+Current RPi.GPIO version supported: 0.6.2 (to the limits of [these differences](https://github.com/paly2/GPIOEmu#differences-with-the-rpigpio-module))
+
 ![GPIOEmu GUI screenshot](https://raw.githubusercontent.com/paly2/GPIOEmu/master/screenshot.png)
 
 ## How to install it
@@ -28,7 +32,7 @@ Note: it should be able to run with Python2, however, there may be bugs.
 
 ## How to use it
 
-Documentation: mostly the same as [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/). See "differences with the RPi.GPIO module" for... differences.
+Documentation: mostly the same as [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/). See [differences with the RPi.GPIO module"](https://github.com/paly2/GPIOEmu#differences-with-the-rpigpio-module) for... differences.
 
 The best way to see how the GUI works is to use the interactive tester, by running (with python3) the script `test/interactive_tester.py`.
 ```
@@ -44,11 +48,11 @@ Interactive console:
 ```
 Now, you can type any RPi.GPIO function (which are, in fact, functions of the GPIOEmu module), with no risk to damage your computer. Look at your GUI!  
 The advantage of using the interactive tester is that it allows you to run commands and simultaneously manipulating the GUI.  
-You can also run python3 and then import GPIOEmu as GPIO - it will give you exactly the same result.
+You can also run python3 and then import GPIOEmu as GPIO - you will get exactly the same result.
 
 Create any program using the RPi.GPIO. Now you can test it on any computer having GPIOEmu installed by replacing the RPi.GPIO import by the GPIOEmu import.  
 For example, you may replace `import RPi.GPIO` by `import GPIOEmu as RPi.GPIO`, or `import RPi.GPIO as GPIO` by `import GPIOEmu as GPIO`.  
-You do not need to change the rest of your program, now you can run it (except in some cases, listed in the "Differences with the RPI.GPIO module" section).
+You do not need to change the rest of your program, now you can run it (except in some cases, listed in the [differences with the RPI.GPIO module](https://github.com/paly2/GPIOEmu#differences-with-the-rpigpio-module) section).
 
 When GPIOEmu is imported, a window is opened, and it is closed when your program exits. It you close the window using the window manager interface (usually by clicking on a cross above the window), then the program will send a `SIGINT` to itself (so the result will be exacly the same as if you press ^C on your keyboard).
 
@@ -81,3 +85,4 @@ Unlike the RPi.GPIO module, it has two threads (without counting the optional ev
 * The GUI is sometimes laggy (but always working).
 * There should not be multi-thread mutual access bug, however these bugs always have a very low chance of happening, so there might be still undiscovered bugs of this kind. If you find one, please report it by creating an issue on the GitHub repository.
 * `wait_for_edge` overrides edge used with `add_event_detect`. But this "bug" is absolutely voluntary in GPIOEmu: it reproduces the RPi.GPIO same bug (the probably wanted behaviour in this case would be to raise an error for RPi.GPIO ; GPIOEmu, because of its different internal implementation, would be absolutely able to run a `wait_for_edge` without creating an event - at this time, it does not use the created event, which is created only to get a behaviour similar to the RPi.GPIO one).
+* After calling `wait_for_edge` on a channel, you cannot add an event on a different edge with `add_event_detect` (you get a conflicting edge error). Still an RPi.GPIO bug voluntary reproduction.
