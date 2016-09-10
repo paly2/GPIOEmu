@@ -23,7 +23,6 @@ setup(name             = 'GPIOEmu',
       keywords         = 'Raspberry Pi GPIO Emulator',
       url              = 'https://github.com/paly2/GPIOEmu',
       classifiers      = classifiers,
-      packages=['GPIOEmu'],
       ext_modules      = [Extension(name='GPIOEmu', sources=['src/py_gpio.c', 'src/GUI.c', 'src/common.c', 'src/constants.c', 'src/py_pwm.c', 'src/event_gpio.c'], libraries=["SDL2", "pthread"], depends=['src/common.h', 'constants.h', 'event_gpio.h', 'GUI.h', 'py_pwm.h'])],
       data_files=[('/usr/share/GPIOEmu/images', ['src/images/GPIO_rev3.bmp', 'src/images/high.bmp', 'src/images/low.bmp', 'src/images/in.bmp', 'src/images/out.bmp', 'src/images/icon.bmp', 'src/images/icon.bmp', 'src/images/pull-down.bmp', 'src/images/pull-up.bmp', 'src/images/unknown_state.bmp', 'src/images/unset.bmp']),
                   ('/usr/share/GPIOEmu/images/pwm', ['src/images/pwm/pwm.bmp', 'src/images/pwm/0.bmp', 'src/images/pwm/1.bmp', 'src/images/pwm/2.bmp', 'src/images/pwm/3.bmp', 'src/images/pwm/4.bmp', 'src/images/pwm/5.bmp', 'src/images/pwm/6.bmp', 'src/images/pwm/7.bmp', 'src/images/pwm/8.bmp', 'src/images/pwm/9.bmp', 'src/images/pwm/per_cent.bmp'])])
