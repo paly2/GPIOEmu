@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <Python.h>
 
 #include "GUI.h"
 #include "common.h"
@@ -18,7 +18,7 @@ static SDL_Thread* mainloop_thread;
 static int mainloop_end = 0;
 
 void close_GUI(void) {
-	if (window == NULL)
+	if (GPIO_image == NULL)
 		return; // Not set yet or already closed
 
 	// Stop the mainloop thread
@@ -40,22 +40,24 @@ int load_GUI(void) {
 	event_lock = SDL_CreateMutex();
 
 	// SDL_Init / SDL_Quit
-	Py_AtExit(close_GUI);
+	atexit(close_GUI);
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
 		fprintf(stderr, "Unable to initialize SDL: %s\n", SDL_GetError());
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
 		return -1;
 	}
 
 	// Window and icon
 	window = SDL_CreateWindow("GPIOEmu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 640, 0);
 	if (window == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
+		SDL_Quit();
+		fprintf(stderr, "Unable to create a window: %s\n", SDL_GetError());
 		return -1;
 	}
 	SDL_Surface* icon = SDL_LoadBMP(IMG_PATH"icon.bmp");
 	if (icon == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		fprintf(stderr, "Unable to load the icon: %s\n", SDL_GetError());
 		return -1;
 	}
 	SDL_SetWindowIcon(window, icon);
@@ -64,7 +66,9 @@ int load_GUI(void) {
 	// Renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_TARGETTEXTURE);
 	if (renderer == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		fprintf(stderr, "Unable to create a renderer: %s\n", SDL_GetError());
 		return -1;
 	}
 
@@ -82,16 +86,14 @@ int load_GUI(void) {
 		break;
 	}
 	if (GPIO_image_surface == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		fprintf(stderr, "Unable to load the GPIO image surface: %s\n", SDL_GetError());
 		return -1;
 	}
 	GPIO_image = SDL_CreateTextureFromSurface(renderer, GPIO_image_surface);
 	SDL_FreeSurface(GPIO_image_surface);
-	if (GPIO_image == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
-		return -1;
-	}
-
 
 	return 0;
 }
@@ -173,7 +175,7 @@ static void draw_modes(void) {
 			break;
 		}
 		if (mode_surface == NULL) {
-			fprintf(stderr, "GPIOEmu: Unable to open the direction BMP file: %s\n", SDL_GetError()); // Don't use python exceptions here.
+			fprintf(stderr, "GPIOEmu: Unable to open the direction BMP file: %s\n", SDL_GetError());
 			return;
 		}
 		mode_texture = SDL_CreateTextureFromSurface(renderer, mode_surface);
@@ -347,7 +349,7 @@ static void draw_states(void) {
 			goto copy_texture;
 		}
 		if (state_surface == NULL) {
-			fprintf(stderr, "GPIOEmu: Unable to open the state BMP file: %s\n", SDL_GetError()); // Don't use python exceptions here.
+			fprintf(stderr, "GPIOEmu: Unable to open the state BMP file: %s\n", SDL_GetError());
 			return;
 		}
 		state_texture = SDL_CreateTextureFromSurface(renderer, state_surface);
@@ -372,6 +374,9 @@ void GUI_draw(void) {
 }
 
 static int mainloop(void* arg) {
+	if (load_GUI() == -1)
+		return -1;
+	GUI_draw();
 	while (1) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -398,7 +403,7 @@ static int mainloop(void* arg) {
 int GUI_run_mainloop(void) {
 	mainloop_thread = SDL_CreateThread(mainloop, "MainloopThread", (void*) NULL);
 	if (mainloop_thread == NULL) {
-		PyErr_SetString(PyExc_RuntimeError, SDL_GetError());
+		fprintf(stderr, "Unable to create the mainloop thread: %s\n", SDL_GetError());
 		return -1;
 	}
 

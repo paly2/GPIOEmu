@@ -82,7 +82,6 @@ Unlike the RPi.GPIO module, it has two threads (without counting the optional ev
 
 ## Bugs
 
-* The GUI is sometimes laggy (but always working).
 * There should not be multi-thread mutual access bug, however these bugs always have a very low chance of happening, so there might be still undiscovered bugs of this kind. If you find one, please report it by creating an issue on the GitHub repository.
 * `wait_for_edge` overrides edge used with `add_event_detect`. But this "bug" is absolutely voluntary in GPIOEmu: it reproduces the RPi.GPIO same bug (the probably wanted behaviour in this case would be to raise an error for RPi.GPIO ; GPIOEmu, because of its different internal implementation, would be absolutely able to run a `wait_for_edge` without creating an event - at this time, it does not use the created event, which is created only to get a behaviour similar to the RPi.GPIO one).
 * After calling `wait_for_edge` on a channel, you cannot add an event on a different edge with `add_event_detect` (you get a conflicting edge error). Still an RPi.GPIO bug voluntary reproduction.

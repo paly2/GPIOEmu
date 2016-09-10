@@ -863,16 +863,6 @@ PyMODINIT_FUNC initGPIOEmu(void)
 		PyEval_InitThreads();
 
 	// run GUI
-	if (load_GUI() != 0) {
-		setup_error = 1;
-#if PY_MAJOR_VERSION > 2
-		return NULL;
-#else
-		return;
-#endif
-	}
-
-	GUI_draw();
 	if (GUI_run_mainloop() != 0) {
 		setup_error = 1;
 #if PY_MAJOR_VERSION > 2

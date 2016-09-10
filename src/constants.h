@@ -1,3 +1,5 @@
+#include "Python.h"
+
 #define PY_PUD_CONST_OFFSET 20
 #define PY_EVENT_CONST_OFFSET 30
 
