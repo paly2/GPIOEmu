@@ -78,7 +78,7 @@ Functions are the same, warnings are the same...
 
 * The interrupt functions (`add_event_detect`, `wait_for_edge`, `remove_event_detect`, `event_detected`, `add_event_callback`) may have different behaviour, because of their different internal implementation.
 * The RPi.GPIO module provides a RPI_INFO dictionary containing 6 fields. This dictionary is also providded by GPIOEmu, but it contains only one field (P1_REVISION), also accessible as the RPI_REVISION deprecated variable (provided both by RPi.GPIO and GPIOEmu).
-* The RPi.GPIO module is able to tell you many more modes using `gpio_mode()`. This function of the GPIOEmu module returns either INPUT, OUTPUT or PWM (or -1).
+* The RPi.GPIO module is able to tell you many more modes using `gpio_mode()`. This function of the GPIOEmu module returns either INPUT or OUTPUT (or -1).
 
 ## How does it work
 

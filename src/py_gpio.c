@@ -753,10 +753,7 @@ static PyObject *py_gpio_function(PyObject *self, PyObject *args) {
 	if (get_gpio_number(channel, &gpio))
 		return NULL;
 
-	if (gpio_state[gpio] >= 0)
-		func = Py_BuildValue("i", PWM);
-	else
-		func = Py_BuildValue("i", gpio_direction[gpio]);
+	func = Py_BuildValue("i", gpio_direction[gpio]);
 	return func;
 }
 
