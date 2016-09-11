@@ -812,6 +812,7 @@ PyMODINIT_FUNC initGPIOEmu(void)
 	PyObject *module = NULL;
 	PyObject *board_info;
 	PyObject *rpi_revision; // deprecated
+	PyObject *version;
 
 #if PY_MAJOR_VERSION > 2
 	if ((module = PyModule_Create(&gpioemumodule)) == NULL)
@@ -861,6 +862,10 @@ PyMODINIT_FUNC initGPIOEmu(void)
 
 	if (!PyEval_ThreadsInitialized())
 		PyEval_InitThreads();
+
+	// Add VERSION
+	version = Py_BuildValue("s", VERSION);
+	PyModule_AddObject(module, "VERSION", version);
 
 	// run GUI
 	if (GUI_run_mainloop() != 0) {

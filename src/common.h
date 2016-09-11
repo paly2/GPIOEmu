@@ -15,6 +15,8 @@
 #define OUTPUT 0
 #define DIRECTION_NONE -1
 
+#define VERSION "0.6.2"
+
 int gpio_mode;
 const int pin_to_gpio_rev1[41];
 const int pin_to_gpio_rev2[41];
